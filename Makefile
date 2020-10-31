@@ -95,16 +95,6 @@ define docker_run
 		$1
 endef
 
-define build_bin
-	@echo
-	docker run --rm \
-		-v ${ROOT_DIR}:${DOCKER_GO_PATH} \
-		-v ${GO_CACHE_DIR}:/go/pkg \
-		-w ${DOCKER_GO_PATH}/bin \
-		${DOCKER_GO_IMAGE} \
-		make rebuild
-endef
-
 # ------------------------------------------------------------------------------
 #  clean exited docker process
 #
