@@ -10,6 +10,11 @@ GOX       		= $(GOBIN)/gox
 GOIMPORTS  		= $(GOBIN)/goimports
 ARCH       		= $(shell uname -p)
 
+ROOT_DIR=${PWD}
+DOCKER_GO_PATH=/usr/src/myapp
+DOCKER_GO_IMAGE="my-go-layout"
+GO_CACHE_DIR ?= ${ROOT_DIR}/_cache
+
 #
 # go option
 #
@@ -69,3 +74,59 @@ clean:
 .PHONY: rebuild
 rebuild: clean build
 
+# ------------------------------------------------------------------------------
+#  docker functions
+#
+
+define docker_build
+	@echo
+	docker build -t ${DOCKER_GO_IMAGE} \
+		--build-arg USER_ID=$(shell id -u) \
+		--build-arg GROUP_ID=$(shell id -g) .
+endef
+
+define docker_run
+	@echo
+	docker run --rm \
+		-v ${ROOT_DIR}:${DOCKER_GO_PATH} \
+		-v ${GO_CACHE_DIR}:/go/pkg \
+		-w ${DOCKER_GO_PATH} \
+		${DOCKER_GO_IMAGE} \
+		$1
+endef
+
+define build_bin
+	@echo
+	docker run --rm \
+		-v ${ROOT_DIR}:${DOCKER_GO_PATH} \
+		-v ${GO_CACHE_DIR}:/go/pkg \
+		-w ${DOCKER_GO_PATH}/bin \
+		${DOCKER_GO_IMAGE} \
+		make rebuild
+endef
+
+# ------------------------------------------------------------------------------
+#  clean exited docker process
+#
+DOCKER_PS_EXITED= \
+	$(shell test -x docker && docker ps -a -f status=exited -f ancestor=${DOCKER_GO_IMAGE} -q)
+
+.PHONY: clean-docker-exited
+clean-docker-exited:
+ifneq "$(DOCKER_PS_EXITED)" ""
+	@echo "Clean exited docker build process"
+	docker rm $(DOCKER_PS_EXITED)
+endif
+
+# ------------------------------------------------------------------------------
+#  build with docker
+#
+
+.PHONY: docker-build-image
+docker-build-image:
+	$(call docker_build)
+	@echo "[x]  Go build image has been created!"
+
+.PHONY: docker-build-app
+docker-build-app: docker-build-image
+	$(call docker_run,make rebuild)
