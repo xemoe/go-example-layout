@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
+	"github.com/xemoe/go-layout/pkg/example"
 )
 
 func main() {
-	fmt.Println("This is eample")
+	example.SaySomething("Hello from cmd/go-example")
 }

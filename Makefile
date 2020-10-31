@@ -62,3 +62,10 @@ test-unit:
 .PHONY: clean
 clean:
 	@rm -rf '$(BINDIR)'
+
+# ------------------------------------------------------------------------------
+#  rebuild
+
+.PHONY: rebuild
+rebuild: clean build
+
