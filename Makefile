@@ -13,7 +13,6 @@ ARCH       		= $(shell uname -p)
 ROOT_DIR=${PWD}
 DOCKER_GO_PATH=/usr/src/myapp
 DOCKER_GO_IMAGE="my-go-layout"
-GO_CACHE_DIR ?= ${ROOT_DIR}/_cache
 
 #
 # go option
@@ -36,7 +35,8 @@ all: build
 
 build: $(BINDIR)/$(BINNAME)
 
-GO_APP_CMD	= ./cmd/go-example
+# GO_APP_CMD	= ./cmd/go-example
+GO_APP_CMD	= .
 $(BINDIR)/$(BINNAME): $(SRC)
 	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o '$(BINDIR)'/$(BINNAME) $(GO_APP_CMD)
 
@@ -89,7 +89,6 @@ define docker_run
 	@echo
 	docker run --rm \
 		-v ${ROOT_DIR}:${DOCKER_GO_PATH} \
-		-v ${GO_CACHE_DIR}:/go/pkg \
 		-w ${DOCKER_GO_PATH} \
 		${DOCKER_GO_IMAGE} \
 		$1
