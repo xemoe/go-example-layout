@@ -35,7 +35,6 @@ all: build
 
 build: $(BINDIR)/$(BINNAME)
 
-# GO_APP_CMD	= ./cmd/go-example
 GO_APP_CMD	= .
 $(BINDIR)/$(BINNAME): $(SRC)
 	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o '$(BINDIR)'/$(BINNAME) $(GO_APP_CMD)
