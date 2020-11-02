@@ -17,31 +17,25 @@ type PingResponseMessage struct {
 	Message    string
 }
 
-func pingHandler(w http.ResponseWriter, r *http.Request) {
+//
+// PingHandler for example http handle
+//
+func PingHandler(w http.ResponseWriter, r *http.Request) {
 
 	log.WithFields(log.Fields{
 		"req": r.Method + " ping",
 	}).Debug("Receive ping")
 
-	//
-	// Prepare response message
-	//
-	message := PingResponseMessage{200, "ok", "Ok!"}
-
-	js, err := json.Marshal(message)
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
-	w.Write(js)
+
+	json.NewEncoder(w).Encode(PingResponseMessage{200, "ok", "Ok!"})
 }
 
 //
 // Serve for start api server
 //
 func Serve(port int) {
-	http.HandleFunc("/ping", pingHandler)
+	http.HandleFunc("/ping", PingHandler)
 	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", port), nil))
 }

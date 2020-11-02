@@ -10,6 +10,6 @@ Golang Project Layout Template
 
 ### TODO
 
-* [ ] Add api_test.go
+* [x] Add api_test.go
 * [ ] Add configuration_test.go
 * [ ] Add validation_test.go
