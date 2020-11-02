@@ -18,33 +18,22 @@ package cmd
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/xemoe/go-layout/pkg/example"
 )
 
-// exampleCmd represents the example command
-var exampleCmd = &cobra.Command{
-	Use:   "example",
+var apiCmd = &cobra.Command{
+	Use:   "api",
 	Short: "A brief description of your command",
 	Long:  `A longer description that spans multiple lines and likely contains examples.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		example.SaySomething("Example from cmd/example")
-
 		log.WithFields(log.Fields{
-			"config.GO_LAYOUT_EXAMPLE_MESSAGE": v.Get("GO_LAYOUT_EXAMPLE_MESSAGE"),
-		}).Debugf("Config GO_LAYOUT_EXAMPLE_MESSAGE: %s", v.Get("GO_LAYOUT_EXAMPLE_MESSAGE"))
+			"flag.port": v.Get("port"),
+		}).Debugf("Flag port: %d", v.Get("port"))
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(exampleCmd)
+	apiCmd.Flags().IntP("port", "p", 8088, "Api Bind port address")
+	v.BindPFlag("port", apiCmd.Flags().Lookup("port"))
 
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// exampleCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// exampleCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	rootCmd.AddCommand(apiCmd)
 }

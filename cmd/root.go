@@ -1,5 +1,5 @@
 /*
-Copyright © 2020 Teerapong Ladlee blckpearl.sheeper@gmail.com
+Copyright © 2020 Teerapong Ladlee <blckpearl.sheeper@gmail.com>
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -27,16 +27,13 @@ import (
 )
 
 var cfgFile string
-var v *viper.Viper
+var v *viper.Viper = viper.New()
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "go-layout",
 	Short: "A brief description of your application",
 	Long:  `A longer description.`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	//	Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -52,18 +49,12 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is /etc/go-layout/config.yaml)")
-
-	// Cobra also supports local flags, which will only run
-	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 
 	example.InitLogger()
 }
 
 func initConfig() {
-
-	v = viper.New()
-
 	//
 	// Read .env file first
 	//
