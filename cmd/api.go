@@ -18,6 +18,7 @@ package cmd
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/xemoe/go-layout/pkg/example"
 )
 
 var apiCmd = &cobra.Command{
@@ -28,6 +29,8 @@ var apiCmd = &cobra.Command{
 		log.WithFields(log.Fields{
 			"flag.port": v.Get("port"),
 		}).Debugf("Flag port: %d", v.Get("port"))
+
+		example.Serve(v.GetInt("port"))
 	},
 }
 
