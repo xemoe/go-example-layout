@@ -1,4 +1,4 @@
-Golang Project Layout Template
+Golang Example Project Layout
 
 ### Available make target
 
