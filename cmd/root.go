@@ -80,6 +80,4 @@ func initConfig() {
 	log.WithFields(log.Fields{
 		"env.GO_APP_ENV": v.Get("GO_APP_ENV"),
 	}).Debugf("Env GO_APP_ENV: %s", v.Get("GO_APP_ENV"))
-
-	//GO_LAYOUT_EXAMPLE_MESSAGE
 }
