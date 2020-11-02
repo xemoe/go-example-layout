@@ -16,6 +16,13 @@ const (
 )
 
 //
+// APIConfig for api cmd
+//
+type APIConfig struct {
+	Port int `validate:"required,min=1,max=65535"`
+}
+
+//
 // InitEnv for setup .env configuration
 //
 func InitEnv(v *viper.Viper) *viper.Viper {

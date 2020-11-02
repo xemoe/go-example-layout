@@ -21,21 +21,34 @@ import (
 	"github.com/xemoe/go-layout/pkg/example"
 )
 
+const (
+	//
+	// DefaultPort for default api port
+	//
+	DefaultPort = 8088
+)
+
 var apiCmd = &cobra.Command{
 	Use:   "api",
 	Short: "A brief description of your command",
 	Long:  `A longer description that spans multiple lines and likely contains examples.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		log.WithFields(log.Fields{
-			"flag.port": v.Get("port"),
-		}).Debugf("Flag port: %d", v.Get("port"))
 
-		example.Serve(v.GetInt("port"))
+		config := &example.APIConfig{
+			Port: v.GetInt("port"),
+		}
+		example.ValidateAPIConfig(config)
+
+		log.WithFields(log.Fields{
+			"flag.port": config.Port,
+		}).Debugf("Flag port: %d", config.Port)
+
+		example.Serve(config.Port)
 	},
 }
 
 func init() {
-	apiCmd.Flags().IntP("port", "p", 8088, "Api Bind port address")
+	apiCmd.Flags().IntP("port", "p", DefaultPort, "Api Bind port address")
 	v.BindPFlag("port", apiCmd.Flags().Lookup("port"))
 
 	rootCmd.AddCommand(apiCmd)

@@ -12,6 +12,7 @@ require (
 	github.com/fatih/motion v1.1.0 // indirect
 	github.com/fsnotify/fsnotify v1.4.9 // indirect
 	github.com/go-delve/delve v1.5.0 // indirect
+	github.com/go-playground/validator/v10 v10.4.1
 	github.com/google/go-dap v0.3.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/josharian/impl v1.0.0 // indirect
