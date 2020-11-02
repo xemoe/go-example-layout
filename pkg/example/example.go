@@ -1,7 +1,30 @@
 package example
 
-import "fmt"
+import (
+	nested "github.com/antonfisher/nested-logrus-formatter"
+	log "github.com/sirupsen/logrus"
+)
+
+func init() {
+
+	log.SetFormatter(&nested.Formatter{
+		HideKeys:       false,
+		NoColors:       false,
+		NoFieldsColors: false,
+		ShowFullLevel:  true,
+		FieldsOrder:    []string{"process", "status"},
+	})
+
+	log.SetLevel(log.DebugLevel)
+
+	//
+	// Enable to show caller
+	//
+	// log.SetReportCaller(true)
+}
 
 func SaySomething(words string) {
-	fmt.Println(words)
+	log.WithFields(log.Fields{
+		"words": words,
+	}).Infof("Say: %s", words)
 }
