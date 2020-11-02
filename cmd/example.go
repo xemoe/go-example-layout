@@ -18,7 +18,7 @@ package cmd
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
-	"github.com/xemoe/go-layout/pkg/example"
+	"github.com/xemoe/go-example-layout/pkg/example"
 )
 
 // exampleCmd represents the example command

@@ -23,7 +23,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/xemoe/go-layout/pkg/example"
+	"github.com/xemoe/go-example-layout/pkg/example"
 )
 
 var cfgFile string

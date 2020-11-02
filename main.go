@@ -1,6 +1,6 @@
 package main
 
-import "github.com/xemoe/go-layout/cmd"
+import "github.com/xemoe/go-example-layout/cmd"
 
 func main() {
 	cmd.Execute()

@@ -1,4 +1,4 @@
-module github.com/xemoe/go-layout
+module github.com/xemoe/go-example-layout
 
 go 1.15
 
