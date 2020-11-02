@@ -2,4 +2,5 @@
 vendor
 *.iml
 
-_cache
+config.yml
+.env

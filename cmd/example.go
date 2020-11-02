@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/xemoe/go-layout/pkg/example"
 )
@@ -27,6 +28,10 @@ var exampleCmd = &cobra.Command{
 	Long:  `A longer description that spans multiple lines and likely contains examples.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		example.SaySomething("Example from cmd/example")
+
+		log.WithFields(log.Fields{
+			"config.GO_LAYOUT_EXAMPLE_MESSAGE": v.Get("GO_LAYOUT_EXAMPLE_MESSAGE"),
+		}).Debugf("Config GO_LAYOUT_EXAMPLE_MESSAGE: %s", v.Get("GO_LAYOUT_EXAMPLE_MESSAGE"))
 	},
 }
 

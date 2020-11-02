@@ -23,6 +23,9 @@ func init() {
 	// log.SetReportCaller(true)
 }
 
+//
+// SaySomething for example function
+//
 func SaySomething(words string) {
 	log.WithFields(log.Fields{
 		"words": words,
