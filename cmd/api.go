@@ -37,7 +37,7 @@ var apiCmd = &cobra.Command{
 		config := &example.APIConfig{
 			Port: v.GetInt("port"),
 		}
-		example.ValidateAPIConfig(config)
+		example.ValidateAPIConfig(config, true)
 
 		log.WithFields(log.Fields{
 			"flag.port": config.Port,

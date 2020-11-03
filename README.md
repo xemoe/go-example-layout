@@ -11,5 +11,4 @@
 ### TODO
 
 - [x] Add api_test.go
-- [ ] Add configuration_test.go
-- [ ] Add validation_test.go
+- [x] Add configuration_test.go

@@ -1,8 +1,6 @@
 package example
 
 import (
-	"os"
-
 	"github.com/go-playground/validator/v10"
 	log "github.com/sirupsen/logrus"
 )
@@ -13,7 +11,7 @@ var validate *validator.Validate
 //
 // ValidateAPIConfig for validate APIConfig struct
 //
-func ValidateAPIConfig(c *APIConfig) {
+func ValidateAPIConfig(c *APIConfig, errorLog bool) error {
 
 	validate = validator.New()
 
@@ -21,13 +19,19 @@ func ValidateAPIConfig(c *APIConfig) {
 	if err != nil {
 
 		if _, ok := err.(*validator.InvalidValidationError); ok {
-			log.Error(err)
+			if errorLog {
+				log.Error(err)
+			}
+			return err
 		}
 
 		for _, err := range err.(validator.ValidationErrors) {
-			log.Error(err)
+			if errorLog {
+				log.Error(err)
+			}
+			return err
 		}
-
-		os.Exit(1)
 	}
+
+	return nil
 }
