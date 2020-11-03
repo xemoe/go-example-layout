@@ -1,4 +1,4 @@
-package example
+package example_test
 
 import (
 	"encoding/json"
@@ -7,6 +7,8 @@ import (
 	"net/http/httptest"
 	"reflect"
 	"testing"
+
+	"github.com/xemoe/go-example-layout/pkg/example"
 )
 
 func AreEqualJSON(s1, s2 string) (bool, error) {
@@ -44,7 +46,7 @@ func TestHTTPPing(t *testing.T) {
 
 		// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 		resp := httptest.NewRecorder()
-		handler := http.HandlerFunc(PingHandler)
+		handler := http.HandlerFunc(example.PingHandler)
 
 		// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
 		// directly and pass in our Request and ResponseRecorder.
