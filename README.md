@@ -1,6 +1,6 @@
-Golang Example Project Layout
+# Golang Example Project Layout
 
-### Available make target
+## Available make target
 
 - build
 - test
