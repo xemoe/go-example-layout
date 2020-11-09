@@ -5,3 +5,4 @@ vendor
 bin
 config.yml
 .env
+*.db
