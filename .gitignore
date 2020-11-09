@@ -2,5 +2,6 @@
 vendor
 *.iml
 
+bin
 config.yml
 .env
