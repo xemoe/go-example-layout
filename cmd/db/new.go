@@ -2,6 +2,7 @@ package db
 
 import (
 	"os"
+	"path/filepath"
 
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
@@ -12,10 +13,10 @@ import (
 )
 
 const (
-	defaultDbFilename = "test.db"
+	defaultDbFileName = "test.db"
 )
 
-var dbFilename string
+var dbFileName string
 
 // NewCmd represents the new command
 var NewCmd = &cobra.Command{
@@ -24,24 +25,26 @@ var NewCmd = &cobra.Command{
 	Long:  `Create new sqlite3 db with required db file name (--db-filename).`,
 	Run: func(cmd *cobra.Command, args []string) {
 
+		filename := toAbsolutePath(dbFileName)
+
 		//
 		// return if db file exist
 		//
-		if fileExists(dbFilename) {
+		if fileExists(filename) {
 			log.WithFields(log.Fields{
-				"db.file":   dbFilename,
+				"db.file":   filename,
 				"db.exists": true,
-			}).Errorf("DB file: %s is exist", dbFilename)
+			}).Errorf("DB file is exist")
 
 			return
 		}
 
-		db, err := gorm.Open(sqlite.Open(dbFilename), &gorm.Config{})
+		db, err := gorm.Open(sqlite.Open(filename), &gorm.Config{})
 		if err != nil {
 			log.WithFields(log.Fields{
-				"db.file":    dbFilename,
+				"db.file":    filename,
 				"db.created": false,
-			}).Errorf("DB file: %s cannot create", dbFilename)
+			}).Errorf("DB file  cannot create")
 			log.Error(err)
 
 			return
@@ -62,10 +65,18 @@ var NewCmd = &cobra.Command{
 		}
 
 		log.WithFields(log.Fields{
-			"db.file":    dbFilename,
+			"db.file":    filename,
 			"db.created": true,
-		}).Infof("DB file: %s has been create", dbFilename)
+		}).Infof("DB file  has been create")
 	},
+}
+
+func toAbsolutePath(filename string) string {
+	p, err := filepath.Abs(filename)
+	if err != nil {
+		panic(err)
+	}
+	return p
 }
 
 // fileExists checks if a file exists and is not a directory before we
@@ -80,8 +91,8 @@ func fileExists(filename string) bool {
 
 func init() {
 	NewCmd.PersistentFlags().StringVar(
-		&dbFilename,
+		&dbFileName,
 		"db-filename",
-		defaultDbFilename,
+		defaultDbFileName,
 		"sqlite3 db filename (default is test.db)")
 }

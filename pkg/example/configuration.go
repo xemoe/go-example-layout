@@ -29,7 +29,7 @@ func InitEnv(v *viper.Viper) *viper.Viper {
 
 	log.WithFields(log.Fields{
 		"file.env": v.ConfigFileUsed(),
-	}).Infof("Using config file: %s", v.ConfigFileUsed())
+	}).Infof("Using .env config file")
 
 	return v
 }
@@ -54,7 +54,7 @@ func InitYaml(v *viper.Viper, cfgFile string) *viper.Viper {
 
 	log.WithFields(log.Fields{
 		"file.configuration": v.ConfigFileUsed(),
-	}).Infof("Using config file: %s", v.ConfigFileUsed())
+	}).Infof("Using yaml config file")
 
 	return v
 }
