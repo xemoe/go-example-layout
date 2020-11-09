@@ -31,13 +31,21 @@ SHELL      		= /usr/bin/env bash
 all: build
 
 # ------------------------------------------------------------------------------
-#  build
+#  build, build-all
+
+PLATFORMS=darwin linux windows
+ARCHITECTURES=amd64
 
 build: $(BINDIR)/$(BINNAME)
 
 GO_APP_CMD	= .
 $(BINDIR)/$(BINNAME): $(SRC)
 	GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -o '$(BINDIR)'/$(BINNAME) $(GO_APP_CMD)
+
+.PHONY: build-all
+build-all:
+	$(foreach GOOS, $(PLATFORMS),\
+	$(foreach GOARCH, $(ARCHITECTURES), $(shell export GOOS=$(GOOS); export GOARCH=$(GOARCH); GO111MODULE=on go build $(GOFLAGS) -tags '$(TAGS)' -ldflags '$(LDFLAGS)' -v -o '$(BINDIR)'/$(BINNAME)-$(GOOS)-$(GOARCH) $(GO_APP_CMD) )))
 
 # ------------------------------------------------------------------------------
 #  install
@@ -117,4 +125,5 @@ docker-build-image:
 
 .PHONY: docker-build-app
 docker-build-app: docker-build-image
-	$(call docker_run,make rebuild)
+	$(call docker_run,make clean)
+	$(call docker_run,make build-all)
