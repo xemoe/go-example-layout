@@ -1,75 +1,70 @@
 package db
 
 import (
-	"database/sql"
 	"os"
 
-	_ "github.com/mattn/go-sqlite3"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
 )
 
+const (
+	defaultDbFilename = "test.db"
+)
+
+var dbFilename string
+
 // NewCmd represents the new command
 var NewCmd = &cobra.Command{
 	Use:   "new",
 	Short: "Create new sqlite3 db",
-	Long:  `Create new sqlite3 db with default backup existing db file (--backup=true).`,
+	Long:  `Create new sqlite3 db with required db file name (--db-filename).`,
 	Run: func(cmd *cobra.Command, args []string) {
-		//
-		// @TODO
-		// - [ ] read db filepath from configuration.
-		// - [ ] check existing sqlite3 db file.
-		// - [ ] do backup if flag --backup=true.
-		//   - generate new backup filename.
-		//   - copy db file with generated filename.
-		//   - remove old db file.
-		// - [ ] create new sqlite3 db.
-		//
-
-		//
-		// @TODO
-		// - [ ] read dbfile value from configuration
-		// - [ ] read dbpath value from configuration
-		// - [ ] read --backup flag value
-		// - [ ] if backup then do db_backup(dbfile)
-		//
-		dbfile := "./test.db"
 
 		//
 		// return if db file exist
 		//
-		if fileExists(dbfile) {
+		if fileExists(dbFilename) {
 			log.WithFields(log.Fields{
-				"db.file":   dbfile,
+				"db.file":   dbFilename,
 				"db.exists": true,
-			}).Errorf("DB file: %s is exist", dbfile)
+			}).Errorf("DB file: %s is exist", dbFilename)
 
 			return
 		}
 
-		db, err := sql.Open("sqlite3", dbfile)
+		db, err := gorm.Open(sqlite.Open(dbFilename), &gorm.Config{})
 		if err != nil {
 			log.WithFields(log.Fields{
-				"db.file":    dbfile,
+				"db.file":    dbFilename,
 				"db.created": false,
-			}).Errorf("DB file: %s cannot create", dbfile)
+			}).Errorf("DB file: %s cannot create", dbFilename)
 			log.Error(err)
 
 			return
 		}
-		defer db.Close()
 
-		err = db.Ping()
+		geDB, err := db.DB()
+		if err != nil {
+			log.Error("Failed to get generic DB():", err)
+			return
+		}
+
+		defer geDB.Close()
+
+		err = geDB.Ping()
 		if err != nil {
 			log.Error("Failed to connect to the source database:", err)
+			return
 		}
 
 		log.WithFields(log.Fields{
-			"db.file":    dbfile,
+			"db.file":    dbFilename,
 			"db.created": true,
-		}).Infof("DB file: %s has been create", dbfile)
+		}).Infof("DB file: %s has been create", dbFilename)
 	},
 }
 
@@ -81,4 +76,12 @@ func fileExists(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func init() {
+	NewCmd.PersistentFlags().StringVar(
+		&dbFilename,
+		"db-filename",
+		defaultDbFilename,
+		"sqlite3 db filename (default is test.db)")
 }

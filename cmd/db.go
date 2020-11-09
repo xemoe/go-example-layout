@@ -30,14 +30,6 @@ var dbCmd = &cobra.Command{
 }
 
 func init() {
-	//
-	// @TODO
-	// - [ ] newCmd `db new --backup-db true`
-	// - [ ] migrateCmd `db migrate`
-	// - [ ] backupCmd `db backup --backup-dir ./backup`
-	// - [ ] restoreCmd `db restore --from-file backup.db`
-	// - [ ] dumpCmd `db dump`
-	//
 	dbCmd.AddCommand(db.NewCmd)
 	rootCmd.AddCommand(dbCmd)
 }
