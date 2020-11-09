@@ -3,13 +3,14 @@ package example_test
 import (
 	"testing"
 
+	"github.com/xemoe/go-example-layout/pkg/entity/config"
 	"github.com/xemoe/go-example-layout/pkg/example"
 )
 
 func TestValidateAPIConfig(t *testing.T) {
 
 	err1 := example.ValidateAPIConfig(
-		&example.APIConfig{
+		&config.APIConfig{
 			Port: 0,
 		}, false)
 	if err1 == nil {
@@ -17,7 +18,7 @@ func TestValidateAPIConfig(t *testing.T) {
 	}
 
 	err2 := example.ValidateAPIConfig(
-		&example.APIConfig{
+		&config.APIConfig{
 			Port: 1,
 		}, false)
 	if err2 != nil {

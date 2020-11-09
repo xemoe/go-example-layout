@@ -18,6 +18,7 @@ package cmd
 import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/xemoe/go-example-layout/pkg/entity/config"
 	"github.com/xemoe/go-example-layout/pkg/example"
 )
 
@@ -34,7 +35,7 @@ var apiCmd = &cobra.Command{
 	Long:  `A longer description that spans multiple lines and likely contains examples.`,
 	Run: func(cmd *cobra.Command, args []string) {
 
-		config := &example.APIConfig{
+		config := &config.APIConfig{
 			Port: v.GetInt("port"),
 		}
 		example.ValidateAPIConfig(config, true)
