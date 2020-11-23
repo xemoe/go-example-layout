@@ -90,9 +90,12 @@ func fileExists(filename string) bool {
 }
 
 func init() {
+	//
+	// flags: --db-filename
+	//
 	NewCmd.PersistentFlags().StringVar(
 		&dbFileName,
 		"db-filename",
 		defaultDbFileName,
-		"sqlite3 db filename (default is test.db)")
+		"sqlite3 db filename")
 }
