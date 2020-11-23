@@ -1,15 +1,15 @@
 package db
 
 import (
+	"database/sql"
 	"os"
 	"path/filepath"
-
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 
 	log "github.com/sirupsen/logrus"
 
 	"github.com/spf13/cobra"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
@@ -24,56 +24,7 @@ var NewCmd = &cobra.Command{
 	Short: "Create new sqlite3 db",
 	Long:  `Create new sqlite3 db with required db file name (--db-filename).`,
 	Run: func(cmd *cobra.Command, args []string) {
-
-		filename := toAbsolutePath(dbFileName)
-
-		//
-		// return if db file exist
-		//
-		if fileExists(filename) {
-			log.WithFields(log.Fields{
-				"db.file":   filename,
-				"db.exists": true,
-			}).Errorf("DB file is exist")
-
-			return
-		}
-
-		db, err := gorm.Open(sqlite.Open(filename), &gorm.Config{})
-		if err != nil {
-			log.WithFields(log.Fields{
-				"db.file":    filename,
-				"db.created": false,
-			}).Errorf("DB file  cannot create")
-			log.Error(err)
-
-			return
-		}
-
-		geDB, err := db.DB()
-		if err != nil {
-			log.Error("Failed to get generic DB():", err)
-			return
-		}
-
-		defer func() {
-			err := geDB.Close()
-			if err != nil {
-				log.Error(err)
-				os.Exit(1)
-			}
-		}()
-
-		err = geDB.Ping()
-		if err != nil {
-			log.Error("Failed to connect to the source database:", err)
-			return
-		}
-
-		log.WithFields(log.Fields{
-			"db.file":    filename,
-			"db.created": true,
-		}).Infof("DB file  has been create")
+		newDB(toAbsolutePath(dbFileName))
 	},
 }
 
@@ -104,4 +55,46 @@ func init() {
 		"db-filename",
 		defaultDbFileName,
 		"sqlite3 db filename")
+}
+
+func newDB(dbfile string) {
+
+	if fileExists(dbfile) {
+		log.WithFields(log.Fields{
+			"db.file":   dbfile,
+			"db.exists": true,
+		}).Errorf("DB file is exist")
+
+		return
+	}
+
+	db, err := sql.Open("sqlite3", dbfile)
+	if err != nil {
+		log.WithFields(log.Fields{
+			"db.file": dbfile,
+			"db.open": false,
+		}).Errorf("DB file  cannot be open")
+		log.Error(err)
+
+		return
+	}
+
+	defer func() {
+		err := db.Close()
+		if err != nil {
+			log.Error(err)
+			os.Exit(1)
+		}
+	}()
+
+	err = db.Ping()
+	if err != nil {
+		log.Error("Failed to connect to the source database:", err)
+		return
+	}
+
+	log.WithFields(log.Fields{
+		"db.file":    dbfile,
+		"db.created": true,
+	}).Infof("DB file  has been create")
 }
