@@ -56,7 +56,13 @@ var NewCmd = &cobra.Command{
 			return
 		}
 
-		defer geDB.Close()
+		defer func() {
+			err := geDB.Close()
+			if err != nil {
+				log.Error(err)
+				os.Exit(1)
+			}
+		}()
 
 		err = geDB.Ping()
 		if err != nil {
