@@ -31,5 +31,7 @@ var dbCmd = &cobra.Command{
 
 func init() {
 	dbCmd.AddCommand(db.NewCmd)
+	dbCmd.AddCommand(db.MigrateCmd)
+
 	rootCmd.AddCommand(dbCmd)
 }
