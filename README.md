@@ -12,7 +12,7 @@
 
 ### TODO - cmd/db
 
-- [ ] add cmd/db/newCmd for `db new --db-filename example.db`
+- [x] add cmd/db/newCmd for `db new --db-filename example.db`
 - [ ] add cmd/db/migrateCmd for `db migrate`
 - [ ] add cmd/db/backupCmd for `db backup --backup-dir ./backup`
 - [ ] add cmd/db/restoreCmd for `db restore --from-file backup.db`
