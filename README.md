@@ -12,8 +12,8 @@
 
 ### TODO - cmd/db
 
-- [x] add cmd/db/newCmd for `db new --db-filename example.db`
-- [x] add cmd/db/migrateCmd for `db migrate`
+- [ ] add cmd/db/newCmd for `db new --db-name example`
+- [ ] add cmd/db/migrateCmd for `db migrate (--db-name example)`
 - [ ] add cmd/db/backupCmd for `db backup --backup-dir ./backup`
 - [ ] add cmd/db/restoreCmd for `db restore --from-file backup.db`
 - [ ] add cmd/db/dumpCmd for `db dump`
