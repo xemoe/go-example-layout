@@ -2,8 +2,6 @@ package db
 
 import (
 	"github.com/spf13/cobra"
-
-	_ "github.com/mattn/go-sqlite3"
 )
 
 var dbName string

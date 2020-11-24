@@ -9,13 +9,15 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
+	_ "github.com/golang-migrate/migrate/v4/database/sqlite3"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/mattn/go-sqlite3"
 )
 
 const (
-	DefaultDBName       = "test"
+	DefaultDBName            = "test"
 	DefaultMigrationFilesDir = "db/migrations"
-	sqliteFileExtension = "db"
+	sqliteFileExtension      = "db"
 )
 
 func toAbsolutePath(filename string) string {
@@ -153,4 +155,9 @@ func MigrateSqliteDB(dbfile string, migrationDir string) {
 
 		return
 	}
+
+	log.WithFields(log.Fields{
+		"db.file":      dbfile,
+		"db.migration": migrationDir,
+	}).Info("Migrate success")
 }
